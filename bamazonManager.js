@@ -44,7 +44,9 @@ case "View Low Inventory":
          break;
 
          case 'Add New Product':
+         newItem()
          break;
+
 
    }
 
@@ -63,7 +65,7 @@ function viewProducts(res) {
         console.log(res[i].item_id + "        " + res[i].product_name + " " + res[i].department_name + " $" + res[i].price + " " + res[i].stock_quantity)
     }
     console.log("------------------------------------------------------------")
-    welcome()
+    connection.end()
     
 
 }
@@ -135,11 +137,53 @@ function addQuantity(res) {
 console.log("Database Updated!")
 console.log("New stock quantity is " + newQuantity + ".")
 
-
 connection.end()
     });
 
         });
         });
         
+}
+
+function newItem(){
+     inquirer.prompt([
+        {
+            type: "input",
+            message: "New Product Name:",
+            name: "product_name"
+            },
+   {
+            type: "input",
+            message: "Department:",
+            name: "department_name"
+            },
+               {
+            type: "input",
+            message: "Price:",
+            name: "price"
+            },
+               {
+            type: "input",
+            message: "How many in stock?",
+            name: "stock_quantity"
+            },
+        ])
+        .then(function (n) {
+
+
+connection.query("INSERT INTO products SET ?", {
+  product_name: n.product_name,
+  department_name: n.department_name ,
+  price: n.price,
+  stock_quantity: n.stock_quantity
+}, function(err, res) {
+  console.log("Database Updated!")
+  connection.end()
+});
+
+     
+    
+  });
+
+
 }
