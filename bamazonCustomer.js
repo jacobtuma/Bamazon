@@ -8,7 +8,7 @@ var connection = mysql.createConnection({
     user: "root",
 
     // Your password
-    password: "jakey122",
+    password: "122",
     database: "bamazon_db"
 });
 var itemID = 0;
@@ -31,7 +31,7 @@ function prompt(res) {
     inquirer.prompt([
         {
             type: "input",
-            message: 'Insert the ID of the item you\'d like. Type "q" to quit.',
+            message: 'Insert the ID of the item you\'d like.',
             name: "item",
             validate: function (value) {
                 if ((value) <= res.length || (value) == "q") {
@@ -47,9 +47,10 @@ function prompt(res) {
             itemPrice = res[choice.item - 1].price
     
 
-            if (choice.item == "q" || choice.item == "Q") {
-                connection.end()
-            } else if (choice.item <= res.length) {
+           if (choice.item == "q") {
+                quit()
+
+            } else {
                 askQuantity(res[choice.item - 1].stock_quantity)
             }
 
@@ -85,6 +86,7 @@ updateDB(quantity, choice.requested)
 
 }
 
+
 function updateDB(quantity, requested) {
 
 newQuantity = quantity - requested;
@@ -98,11 +100,12 @@ console.log("Database Updated!")
     });
 
 console.log("Your total is $" + total )
-connection.end()
-
-
+quit()
 
 }
 
+function quit() {
+    connection.end()
+}
 
 // "UPDATE products SET ? WHERE ?"
